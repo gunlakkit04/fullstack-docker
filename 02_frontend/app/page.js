@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function Page() {
   const [data, setData] = useState([]);
@@ -38,7 +39,7 @@ export default function Page() {
 
       <div className="grid">
         {data.map((item) => (
-          <div className="card" key={item.id}>
+          <Link href={`/attractions/${item.id}`} key={item.id} className="card">
             
             <div className="image-wrapper">
               <img src={item.coverimage} alt={item.name} />
@@ -52,7 +53,7 @@ export default function Page() {
               </small>
             </div>
 
-          </div>
+          </Link>
         ))}
       </div>
     </main>
