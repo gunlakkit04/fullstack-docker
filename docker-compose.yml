@@ -14,7 +14,8 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
-    networks: [stack]
+    networks:
+      - stack
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -25,8 +26,10 @@ services:
       UPLOAD_LIMIT: 256M
     ports:
       - "${PHPMYADMIN_PORT:-8888}:80"
-    depends_on: [mysql]
-    networks: [stack]
+    depends_on:
+      - mysql
+    networks:
+      - stack
 
   api:
     build: ./01_api
@@ -42,8 +45,10 @@ services:
       TZ: Asia/Bangkok
     ports:
       - "${API_PORT:-3001}:3001"
-    depends_on: [mysql]
-    networks: [stack]
+    depends_on:
+      - mysql
+    networks:
+      - stack
 
   frontend:
     build:
@@ -55,8 +60,10 @@ services:
       - NODE_ENV=production
     ports:
       - "${FRONTEND_PORT:-3000}:3000"
-    depends_on: [api]
-    networks: [stack]
+    depends_on:
+      - api
+    networks:
+      - stack
 
 volumes:
   mysql_data:
