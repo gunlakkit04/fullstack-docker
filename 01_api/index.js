@@ -1,42 +1,38 @@
-const express = require('express');
-const mysql = require('mysql2/promise');
-const cors = require('cors');
-require('dotenv').config({ path: '.env.local' });
+const express = require("express");
+const mysql = require("mysql2/promise");
+const cors = require("cors");
+require("dotenv").config();
 
 const app = express();
 
 // middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// database pool
+// database
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'mysql',   // 👈 สำคัญ (Docker ต้องใช้ชื่อ service)
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'test',
-  port: Number(process.env.DB_PORT || 3306),
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
+  host: process.env.DB_HOST || "mysql",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "",
+  database: process.env.DB_NAME || "attractions_db",
+  port: 3306,
 });
 
 // --------------------
 // HEALTH CHECK
 // --------------------
-app.get('/health', async (req, res) => {
+app.get("/health", async (req, res) => {
   try {
-    const [rows] = await pool.query('SELECT 1 AS ok');
+    const [rows] = await pool.query("SELECT 1 as ok");
     res.json({
-      status: 'ok',
-      database: rows[0].ok === 1
+      status: "ok",
+      message: "API is running 🚀",
+      db: rows[0].ok === 1,
     });
   } catch (err) {
-    console.error('Health error:', err);
     res.status(500).json({
-      status: 'error',
-      message: err.message
+      status: "error",
+      message: err.message,
     });
   }
 });
@@ -44,15 +40,17 @@ app.get('/health', async (req, res) => {
 // --------------------
 // GET ALL ATTRACTIONS
 // --------------------
-app.get('/attractions', async (req, res) => {
+app.get("/attractions", async (req, res) => {
   try {
-    const [rows] = await pool.query('SELECT * FROM attractions'); // 👈 แก้ให้ plural (มาตรฐาน)
-    res.json(rows);
+    const [rows] = await pool.query("SELECT * FROM attractions");
+    res.json({
+      count: rows.length,
+      data: rows,
+    });
   } catch (err) {
-    console.error('DB error:', err);
     res.status(500).json({
-      error: 'Database query failed',
-      detail: err.message
+      error: "Database error",
+      message: err.message,
     });
   }
 });
@@ -60,8 +58,8 @@ app.get('/attractions', async (req, res) => {
 // --------------------
 // SERVER START
 // --------------------
-const port = Number(process.env.PORT || 3001);
+const port = process.env.PORT || 3001;
 
-app.listen(port, '0.0.0.0', () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`🚀 API running on http://0.0.0.0:${port}`);
 });
