@@ -22,13 +22,23 @@ export default function DetailPage({ params }) {
     fetchData();
   }, [params.id]);
 
-  if (!item) return <div>Loading...</div>;
+  if (!item) return <div className="center">Loading...</div>;
 
   return (
     <div className="container">
       <h1>{item.name}</h1>
-      <img src={item.coverimage} style={{ width: "100%" }} />
-      <p>{item.detail}</p>
+
+      <img
+        src={item.coverimage}
+        style={{
+          width: "100%",
+          borderRadius: "12px",
+          marginTop: "20px",
+        }}
+      />
+
+      <p style={{ marginTop: "20px" }}>{item.detail}</p>
+
       <p>📍 {item.latitude}, {item.longitude}</p>
     </div>
   );

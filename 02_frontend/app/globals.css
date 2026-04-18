@@ -22,17 +22,19 @@ body {
   gap: 20px;
 }
 
-/* CARD (สำคัญ: ทำให้กดได้) */
+/* CARD CLICKABLE */
 .card {
   background: #1e293b;
   border-radius: 16px;
   overflow: hidden;
   transition: 0.3s;
   box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-  cursor: pointer;
-  text-decoration: none;
-  color: white;
+
   display: block;
+  text-decoration: none;
+  color: inherit;
+
+  cursor: pointer;
 }
 
 .card:hover {
