@@ -14,63 +14,91 @@ export default function Page() {
   }, []);
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", background: "#0f172a" }}>
+    <div style={{ display: "flex", height: "100vh", background: "#0f172a" }}>
 
-      {/* Sidebar */}
+      {/* SIDEBAR */}
       <aside style={{
-        width: "220px",
+        width: "240px",
         background: "#1e293b",
         padding: "20px",
         color: "white"
       }}>
-        <h2>🌍 Menu</h2>
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          <li>Dashboard</li>
-          <li>Attractions</li>
-          <li>Settings</li>
-        </ul>
+        <h2 style={{ marginBottom: 20 }}>🌍 Travel Admin</h2>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <button style={btn}>Dashboard</button>
+          <button style={btn}>Attractions</button>
+          <button style={btn}>Analytics</button>
+          <button style={btn}>Settings</button>
+        </div>
       </aside>
 
-      {/* Main */}
-      <main style={{ flex: 1, padding: "20px" }}>
-        <h1 style={{ color: "white" }}>Attractions</h1>
+      {/* MAIN */}
+      <main style={{ flex: 1, padding: "20px", overflowY: "auto" }}>
 
+        {/* TOP HEADER */}
+        <div style={{
+          background: "#1e293b",
+          padding: "15px",
+          borderRadius: "12px",
+          color: "white",
+          marginBottom: "20px"
+        }}>
+          <h1 style={{ margin: 0 }}>Dashboard</h1>
+          <p style={{ margin: 0, opacity: 0.7 }}>Manage your attractions</p>
+        </div>
+
+        {/* GRID CARDS */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
           gap: "15px"
         }}>
           {data.map((item) => (
             <div key={item.id} style={{
               background: "#1e293b",
-              color: "white",
               borderRadius: "12px",
-              overflow: "hidden"
+              overflow: "hidden",
+              color: "white"
             }}>
 
               <img
                 src={item.coverimage}
                 style={{
                   width: "100%",
-                  height: "180px",
+                  height: "160px",
                   objectFit: "cover"
                 }}
               />
 
-              <div style={{ padding: "10px" }}>
-                <h3>{item.name}</h3>
-                <p style={{ fontSize: "14px", opacity: 0.8 }}>
+              <div style={{ padding: "12px" }}>
+                <h3 style={{ margin: "0 0 5px 0" }}>
+                  {item.name}
+                </h3>
+
+                <p style={{ fontSize: "13px", opacity: 0.7 }}>
                   {item.detail}
                 </p>
+
                 <small>
                   📍 {item.latitude}, {item.longitude}
                 </small>
               </div>
-
             </div>
           ))}
         </div>
+
       </main>
     </div>
   );
 }
+
+const btn = {
+  padding: "10px",
+  background: "#334155",
+  color: "white",
+  border: "none",
+  borderRadius: "8px",
+  cursor: "pointer",
+  textAlign: "left"
+};
