@@ -8,51 +8,34 @@ export default function Page() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const api = process.env.NEXT_PUBLIC_API_HOST;
+    const api = process.env.NEXT_PUBLIC_API_HOST;
 
-        const res = await fetch(`${api}/attractions`);
-        const json = await res.json();
-
-        setData(json.data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
+    fetch(`${api}/attractions`)
+      .then((res) => res.json())
+      .then((json) => {
+        setData(json.data || []);
+      })
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
   }, []);
 
-  if (loading)
-    return <div className="center">⏳ Loading attractions...</div>;
-
-  if (error)
-    return <div className="center error">❌ {error}</div>;
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
-    <main className="container">
-      <header className="header">
-        <h1>🌍 My Attractions</h1>
-        <p>Discover beautiful places around the world</p>
-      </header>
+    <div style={{ padding: 20 }}>
+      <h1>🌍 Attractions</h1>
 
-      <div className="grid">
+      <div style={{ display: "grid", gap: 15 }}>
         {data.map((item) => (
-          <div className="card" key={item.id}>
-            <img src={item.coverimage} alt={item.name} />
-            <div className="content">
-              <h2>{item.name}</h2>
-              <p>{item.detail}</p>
-              <small>
-                📍 {item.latitude}, {item.longitude}
-              </small>
-            </div>
+          <div key={item.id} style={{ border: "1px solid #ccc", padding: 10 }}>
+            <img src={item.coverimage} width="100%" />
+            <h3>{item.name}</h3>
+            <p>{item.detail}</p>
+            <small>{item.latitude}, {item.longitude}</small>
           </div>
         ))}
       </div>
-    </main>
+    </div>
   );
-}
+} 
