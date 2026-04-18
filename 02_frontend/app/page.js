@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 
 export default function Page() {
   const [data, setData] = useState([]);
@@ -13,10 +12,19 @@ export default function Page() {
       try {
         const api = process.env.NEXT_PUBLIC_API_HOST;
 
+        if (!api) {
+          throw new Error("API URL not found in env");
+        }
+
         const res = await fetch(`${api}/attractions`);
+
+        if (!res.ok) {
+          throw new Error("API error: " + res.status);
+        }
+
         const json = await res.json();
 
-        setData(json.data);
+        setData(json.data || []);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -32,28 +40,15 @@ export default function Page() {
 
   return (
     <main className="container">
-      <header className="header">
-        <h1>🌍 Attractions</h1>
-        <p>Beautiful places around the world</p>
-      </header>
+      <h1>🌍 Attractions</h1>
 
       <div className="grid">
         {data.map((item) => (
-          <Link href={`/attractions/${item.id}`} key={item.id} className="card">
-            
-            <div className="image-wrapper">
-              <img src={item.coverimage} alt={item.name} />
-            </div>
-
-            <div className="content">
-              <h2>{item.name}</h2>
-              <p>{item.detail}</p>
-              <small>
-                📍 {item.latitude}, {item.longitude}
-              </small>
-            </div>
-
-          </Link>
+          <div className="card" key={item.id}>
+            <img src={item.coverimage} alt={item.name} />
+            <h3>{item.name}</h3>
+            <p>{item.detail}</p>
+          </div>
         ))}
       </div>
     </main>
