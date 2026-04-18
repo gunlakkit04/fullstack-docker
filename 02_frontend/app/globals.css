@@ -1,22 +1,53 @@
-.layout {
-  display: flex;
-  height: 100vh;
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
 }
 
-.main {
-  flex: 1;
+.container {
   padding: 20px;
-  background: #f5f7fb;
+  max-width: 1000px;
+  margin: auto;
 }
 
-.stats {
-  display: flex;
-  gap: 15px;
-  margin: 20px 0;
+.header {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.bottom {
+.grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 15px;
+}
+
+.card {
+  background: #1e293b;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.03);
+}
+
+.card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.content {
+  padding: 10px;
+}
+
+.center {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.error {
+  color: red;
 }
