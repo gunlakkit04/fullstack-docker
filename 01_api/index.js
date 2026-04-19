@@ -43,10 +43,36 @@ app.get("/health", async (req, res) => {
 app.get("/attractions", async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT * FROM attractions");
+
     res.json({
       count: rows.length,
       data: rows,
     });
+  } catch (err) {
+    res.status(500).json({
+      error: "Database error",
+      message: err.message,
+    });
+  }
+});
+
+// --------------------
+// GET ONE ATTRACTION (DETAIL)
+// --------------------
+app.get("/attractions/:id", async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      "SELECT * FROM attractions WHERE id = ?",
+      [req.params.id]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({
+        message: "Not found",
+      });
+    }
+
+    res.json(rows[0]);
   } catch (err) {
     res.status(500).json({
       error: "Database error",
