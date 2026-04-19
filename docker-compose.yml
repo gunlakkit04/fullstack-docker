@@ -52,7 +52,7 @@ services:
     build: ./02_frontend
     restart: unless-stopped
     environment:
-      NEXT_PUBLIC_API_HOST: http://172.20.10.3:3001
+      NEXT_PUBLIC_API_HOST: http://api:3001
     ports:
       - "3000:3000"
     depends_on:
