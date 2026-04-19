@@ -22,20 +22,28 @@ app.get("/health", async (req, res) => {
 
 // all
 app.get("/chickens", async (req, res) => {
-  const [rows] = await pool.query("SELECT * FROM chickens");
-  res.json({ data: rows });
+  try {
+    const [rows] = await pool.query("SELECT * FROM chickens");
+
+    res.json({
+      data: rows,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// by id
 app.get("/chickens/:id", async (req, res) => {
-  const [rows] = await pool.query(
-    "SELECT * FROM chickens WHERE id=?",
-    [req.params.id]
-  );
+  try {
+    const [rows] = await pool.query(
+      "SELECT * FROM chickens WHERE id = ?",
+      [req.params.id]
+    );
 
-  res.json({ data: rows[0] || null });
-});
-
-app.listen(3001, "0.0.0.0", () => {
-  console.log("API running");
+    res.json({
+      data: rows[0] || null,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
