@@ -15,12 +15,9 @@ export default function ChickenDetail() {
         const api = process.env.NEXT_PUBLIC_API_HOST;
 
         const res = await fetch(`${api}/chickens/${id}`);
-
-        if (!res.ok) throw new Error("Not found");
-
         const json = await res.json();
 
-        setItem(json);
+        setItem(json.data || json);
       } catch (err) {
         setError(err.message);
       } finally {

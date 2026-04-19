@@ -14,9 +14,6 @@ export default function Page() {
         const api = process.env.NEXT_PUBLIC_API_HOST;
 
         const res = await fetch(`${api}/chickens`);
-
-        if (!res.ok) throw new Error("API error");
-
         const json = await res.json();
 
         setData(json.data || []);
@@ -36,7 +33,7 @@ export default function Page() {
   return (
     <main className="container">
       <header className="header">
-        <h1>🐔 My Chicken Farm</h1>
+        <h1>🐔 Chicken Farm</h1>
         <p>จัดการข้อมูลไก่ของคุณ</p>
       </header>
 
