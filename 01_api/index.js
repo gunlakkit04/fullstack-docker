@@ -5,11 +5,10 @@ require("dotenv").config();
 
 const app = express();
 
-// middleware
 app.use(cors());
 app.use(express.json());
 
-// database
+// DB
 const pool = mysql.createPool({
   host: process.env.DB_HOST || "mysql",
   user: process.env.DB_USER || "root",
@@ -24,25 +23,18 @@ const pool = mysql.createPool({
 app.get("/health", async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT 1 as ok");
-    res.json({
-      status: "ok",
-      message: "API is running 🚀",
-      db: rows[0].ok === 1,
-    });
+    res.json({ status: "ok", db: rows[0].ok === 1 });
   } catch (err) {
-    res.status(500).json({
-      status: "error",
-      message: err.message,
-    });
+    res.status(500).json({ error: err.message });
   }
 });
 
 // --------------------
-// GET ALL ATTRACTIONS
+// GET ALL CHICKENS
 // --------------------
-app.get("/attractions", async (req, res) => {
+app.get("/chickens", async (req, res) => {
   try {
-    const [rows] = await pool.query("SELECT * FROM attractions");
+    const [rows] = await pool.query("SELECT * FROM chickens");
 
     res.json({
       count: rows.length,
@@ -50,42 +42,34 @@ app.get("/attractions", async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({
-      error: "Database error",
-      message: err.message,
+      error: err.message,
     });
   }
 });
 
 // --------------------
-// GET ONE ATTRACTION (DETAIL)
+// GET ONE CHICKEN
 // --------------------
-app.get("/attractions/:id", async (req, res) => {
+app.get("/chickens/:id", async (req, res) => {
   try {
     const [rows] = await pool.query(
-      "SELECT * FROM attractions WHERE id = ?",
+      "SELECT * FROM chickens WHERE id = ?",
       [req.params.id]
     );
 
     if (rows.length === 0) {
-      return res.status(404).json({
-        message: "Not found",
-      });
+      return res.status(404).json({ message: "Not found" });
     }
 
     res.json(rows[0]);
   } catch (err) {
-    res.status(500).json({
-      error: "Database error",
-      message: err.message,
-    });
+    res.status(500).json({ error: err.message });
   }
 });
 
-// --------------------
-// SERVER START
-// --------------------
+// START
 const port = process.env.PORT || 3001;
 
 app.listen(port, "0.0.0.0", () => {
-  console.log(`🚀 API running on http://0.0.0.0:${port}`);
+  console.log(`API running on ${port}`);
 });
