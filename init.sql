@@ -1,3 +1,6 @@
+CREATE DATABASE IF NOT EXISTS chicken_db;
+USE chicken_db;
+
 CREATE TABLE chickens (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255),

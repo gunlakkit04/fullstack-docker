@@ -10,8 +10,10 @@ export default function Page() {
   useEffect(() => {
     async function load() {
       const api = process.env.NEXT_PUBLIC_API_HOST;
+
       const res = await fetch(`${api}/chickens/${id}`);
       const json = await res.json();
+
       setItem(json.data);
     }
 
