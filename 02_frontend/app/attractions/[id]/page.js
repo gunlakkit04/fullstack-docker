@@ -1,45 +1,51 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
-export default function DetailPage({ params }) {
+export default function ChickenDetail() {
+  const { id } = useParams();
   const [item, setItem] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchData() {
-      const api = process.env.NEXT_PUBLIC_API_HOST;
+    async function fetchDetail() {
+      try {
+        const api = process.env.NEXT_PUBLIC_API_HOST;
 
-      const res = await fetch(`${api}/attractions`);
-      const json = await res.json();
+        const res = await fetch(`${api}/chickens/${id}`);
+        const json = await res.json();
 
-      const found = json.data.find(
-        (x) => x.id == params.id
-      );
-
-      setItem(found);
+        setItem(json);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     }
 
-    fetchData();
-  }, [params.id]);
+    if (id) fetchDetail();
+  }, [id]);
 
-  if (!item) return <div className="center">Loading...</div>;
+  if (loading) return <div className="center">⏳ Loading...</div>;
+  if (error) return <div className="center error">❌ {error}</div>;
+  if (!item) return <div className="center">No data</div>;
 
   return (
-    <div className="container">
-      <h1>{item.name}</h1>
+    <main className="container">
+      <div className="card">
+        <div className="image-wrapper">
+          <img src={item.image} alt={item.name} />
+        </div>
 
-      <img
-        src={item.coverimage}
-        style={{
-          width: "100%",
-          borderRadius: "12px",
-          marginTop: "20px",
-        }}
-      />
-
-      <p style={{ marginTop: "20px" }}>{item.detail}</p>
-
-      <p>📍 {item.latitude}, {item.longitude}</p>
-    </div>
+        <div className="content">
+          <h1>{item.name}</h1>
+          <p>🐔 สายพันธุ์: {item.breed}</p>
+          <p>⚖️ น้ำหนัก: {item.weight} kg</p>
+          <p>🎂 อายุ: {item.age} เดือน</p>
+        </div>
+      </div>
+    </main>
   );
 }

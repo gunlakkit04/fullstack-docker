@@ -13,7 +13,8 @@ export default function Page() {
       try {
         const api = process.env.NEXT_PUBLIC_API_HOST;
 
-        const res = await fetch(`${api}/attractions`);
+        // ✅ เปลี่ยน endpoint
+        const res = await fetch(`${api}/chickens`);
         const json = await res.json();
 
         setData(json.data || []);
@@ -33,26 +34,29 @@ export default function Page() {
   return (
     <main className="container">
       <header className="header">
-        <h1>🌍 My Attractions</h1>
-        <p>Discover beautiful places</p>
+        {/* ✅ เปลี่ยนชื่อเว็บ */}
+        <h1>🐔 My Chicken Farm</h1>
+        <p>จัดการข้อมูลไก่ของคุณ</p>
       </header>
 
       <div className="grid">
         {data.map((item) => (
           <Link
-            href={`/attractions/${item.id}`}
+            // ✅ เปลี่ยน route
+            href={`/chickens/${item.id}`}
             className="card"
             key={item.id}
           >
             <div className="image-wrapper">
-              <img src={item.coverimage} alt={item.name} />
+              {/* ✅ เปลี่ยน field */}
+              <img src={item.image} alt={item.name} />
             </div>
 
             <div className="content">
               <h2>{item.name}</h2>
-              <p>{item.detail}</p>
+              <p>สายพันธุ์: {item.breed}</p>
               <small>
-                📍 {item.latitude}, {item.longitude}
+                น้ำหนัก: {item.weight} kg | อายุ: {item.age} เดือน
               </small>
             </div>
           </Link>
