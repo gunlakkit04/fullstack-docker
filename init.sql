@@ -1,7 +1,7 @@
 CREATE DATABASE IF NOT EXISTS chicken_db;
 USE chicken_db;
 
-CREATE TABLE chickens (
+CREATE TABLE IF NOT EXISTS chickens (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255),
   breed VARCHAR(255),
