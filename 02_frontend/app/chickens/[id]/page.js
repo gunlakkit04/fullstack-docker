@@ -3,48 +3,31 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
-export default function ChickenDetail() {
+export default function Page() {
   const { id } = useParams();
   const [item, setItem] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchDetail() {
-      try {
-        const api = process.env.NEXT_PUBLIC_API_HOST;
-
-        const res = await fetch(`${api}/chickens/${id}`);
-        const json = await res.json();
-
-        setItem(json.data || json);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+    async function load() {
+      const api = process.env.NEXT_PUBLIC_API_HOST;
+      const res = await fetch(`${api}/chickens/${id}`);
+      const json = await res.json();
+      setItem(json.data);
     }
 
-    if (id) fetchDetail();
+    if (id) load();
   }, [id]);
 
-  if (loading) return <div className="center">⏳ Loading...</div>;
-  if (error) return <div className="center error">❌ {error}</div>;
-  if (!item) return <div className="center">No data</div>;
+  if (!item) return <p>Loading...</p>;
 
   return (
     <main className="container">
       <div className="card">
-        <div className="image-wrapper">
-          <img src={item.image} alt={item.name} />
-        </div>
-
-        <div className="content">
-          <h1>{item.name}</h1>
-          <p>🐔 สายพันธุ์: {item.breed}</p>
-          <p>⚖️ น้ำหนัก: {item.weight} kg</p>
-          <p>🎂 อายุ: {item.age} เดือน</p>
-        </div>
+        <img src={item.image} />
+        <h1>{item.name}</h1>
+        <p>Breed: {item.breed}</p>
+        <p>Weight: {item.weight}</p>
+        <p>Age: {item.age}</p>
       </div>
     </main>
   );

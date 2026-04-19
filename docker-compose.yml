@@ -35,29 +35,26 @@ services:
     restart: unless-stopped
     environment:
       NODE_ENV: production
-      PORT: ${API_PORT}
+      PORT: 3001
       DB_HOST: mysql
       DB_PORT: 3306
       DB_NAME: ${MYSQL_DATABASE}
       DB_USER: ${MYSQL_USER}
       DB_PASSWORD: ${MYSQL_PASSWORD}
-      TZ: Asia/Bangkok
     ports:
-      - "${API_PORT:-3001}:3001"
+      - "3001:3001"
     depends_on:
       - mysql
     networks:
       - stack
 
   frontend:
-    build:
-      context: ./02_frontend
+    build: ./02_frontend
     restart: unless-stopped
     environment:
-      NODE_ENV: production
       NEXT_PUBLIC_API_HOST: http://172.20.10.3:3001
     ports:
-    - "${FRONTEND_PORT:-3000}:3000"
+      - "3000:3000"
     depends_on:
       - api
     networks:
